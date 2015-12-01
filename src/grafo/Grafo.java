@@ -69,8 +69,12 @@ public class Grafo<T extends Comparable> {
         public void insert(T elem){
             NodoGrafo<T> nuevo=new NodoGrafo<T>(elem);
             size=size+1;
-            visitados[size]=false;
-            elementos[size]=elem;
+            if(size>=visitados.size)
+               expandCapacity();
+            else
+
+               visitados[size]=false;
+               elementos[size]=elem;
         }
     
     
