@@ -78,7 +78,10 @@ public class Grafo<T extends Comparable> {
         }
     
     
-    
+    public String buscaOrden(NodoGrafo<T> inicial){
+int x=buscaPos(inicial);
+ while()
+}
     
     
     
