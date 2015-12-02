@@ -165,17 +165,17 @@ public class Grafo<T extends Comparable> {
                  if(marcado(v)==false){
                       return DFS(vertice,done,pila);
                  }
-                  
+                  adyacencia=obtenerAdyacencia(inicio);
                  }
                  
-            
+             return pila;
             }
             
            
             
             
-            return pila;
-        }
+           
+        
         
         
         
