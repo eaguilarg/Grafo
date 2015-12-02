@@ -11,9 +11,38 @@ public class Grafo<T extends Comparable> {
         int [][]matrizAdyacencia;
         public boolean [] visitados;
         public T  [] elementos;
-        int size=0;   
+        int numNodos=0;   
         public NodoGrafo<T> origen;
-    //buscar Orden
+    
+        public void imprimeGrafo(){
+            System.out.println("Elementos: ");
+            imprimeElementos();
+            System.out.println("");
+            System.out.println("Visitados: ");
+            imprimeVisitados();
+            System.out.println("Matriz Adyacencia: ");
+            imprimeMatriz();
+                    
+        }
+        private void imprimeElementos(){
+            for(int i=0;i<elementos.length;i++)
+                System.out.print(elementos[i]+" ");
+        }
+        private void imprimeVisitados(){
+            for(int i=0;i<visitados.length;i++)
+                System.out.print(visitados[i]+" ");
+        }
+        private void imprimeMatriz() {
+        for (int x=0; x <numNodos; x++) {
+            for (int y=0; y<numNodos; y++) {
+                if(y==numNodos)
+                    y=0;
+                System.out.print(matrizAdyacencia[x][y]+" ");
+            }
+            System.out.println("");
+         }
+       
+        }
     
         public Grafo(int n){//n>0
             matrizAdyacencia=new int[n][n];
@@ -24,20 +53,27 @@ public class Grafo<T extends Comparable> {
                      matrizAdyacencia[i][j]=0;
                  }
             }
+            
+            for(int j=0; j<n;j++){
+                visitados[j]=false;
+            }
+            numNodos=n;
         }
         
        
         private int buscarPos(NodoGrafo<T> buscar){
             int x=0;
-            while(x<elementos.length &&  !elementos[x].equals(buscar.getElem())){
+            T elem=elementos[x];
+            while(x<numNodos &&  elem.compareTo(buscar.getElem())!=0){
                 x++;
+                elem=elementos[x];
             }
-            if(x==elementos.length){//no existe
+            if(x==numNodos)//no existe
                 return -1;
-            }
-            else{//si lo encontro
+            else//si lo encontro
                 return x;
-            }
+            
+            
         }
         
         private void expandCapacity(){
@@ -64,17 +100,17 @@ public class Grafo<T extends Comparable> {
                 resp=true;
             return resp;
         }
-        private Queue obtenerAdyacencia(NodoGrafo<T> uno){
+        private Pila<T> obtenerAdyacencia(NodoGrafo<T> uno){
             int pos= buscarPos(uno);
-            Queue<T> cola = null; 
+            Pila<T> pila = null; 
           
             for(int i=0;i<elementos.length;i++){
                 if(matrizAdyacencia[pos][i]==1){
-                    cola.add(elementos[i]);
+                    pila.push(elementos[i]);
                 }
                   
             }
-            return cola;
+            return pila;
         
         }
         public void DFS(T i){//recorrido por profundidad
@@ -84,9 +120,9 @@ public class Grafo<T extends Comparable> {
             
             marcar(inicio);
             System.out.println(inicio.getElem().toString());
-            Queue<T> adyacencia=obtenerAdyacencia(inicio);
+            Pila<T> adyacencia=obtenerAdyacencia(inicio);
             while(!adyacencia.isEmpty())
-                 vertice=adyacencia.remove();
+                 vertice=(T)adyacencia.pop();
                  v=new NodoGrafo<T>(vertice);
                  if(marcado(v)==false){
                      DFS(vertice);
@@ -99,8 +135,8 @@ public class Grafo<T extends Comparable> {
         
         
         public void join(T origen, T destino){
-            NodoGrafo<T> o=new NodoGrafo<T>(origen);
-            NodoGrafo<T> d=new NodoGrafo<T>(destino);
+            NodoGrafo<T> o=new NodoGrafo(origen);
+            NodoGrafo<T> d=new NodoGrafo(destino);
             if(origen.equals(destino)){
                 //no es grafico con ciclos
                 int x=buscarPos(o);
@@ -114,16 +150,11 @@ public class Grafo<T extends Comparable> {
             }
     }
        
-        public void insert(T elem){
-            NodoGrafo<T> nuevo=new NodoGrafo<T>(elem);
-                                      
-               if(size>=visitados.length){
-                   expandCapacity();
-               }
-           
-               visitados[size]=false;
-               elementos[size]=elem;
-               size=size+1;
+        public void insert(T elem, int contador){
+            //NodoGrafo<T> nuevo=new NodoGrafo(elem);
+                               
+               elementos[contador]=elem;
+                contador++;
               
                
         }
@@ -182,10 +213,12 @@ public class Grafo<T extends Comparable> {
     public static void main(String[] args) {
         
         
-       Grafo<Integer> g=new Grafo(10);
-       for(int i=1;i<=10;i++){
-           g.insert(i);
+       Grafo<Integer> g=new Grafo(5);
+       for(int i=1;i<=5;i++){
+           g.insert(i,0);
        }
+       g.imprimeGrafo();
+    
        g.join(1,2);
        g.join(2,3);
        g.join(2,4);
