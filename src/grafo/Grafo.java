@@ -132,29 +132,33 @@ public class Grafo<T extends Comparable> {
             return cola;
         
         }
-        
+        public void dfs(T i){
+            Stack<T> pila=new Stack();
+            DFS(i,false, pila);
+            System.out.println(pila.toString());
+        }
         //recorrido por profundidad
-        public Stack<T> DFS(T i, boolean done, Stack<T> pila){
+        private boolean DFS(T i, boolean done, Stack<T> ruta){
             NodoGrafo<T> inicio=new NodoGrafo(i);
             T vertice = null;
             NodoGrafo<T> v;
-            //Stack<T> cola=new Stack();
+            boolean resp=false;
         
             
             marcar(inicio);
-           // cola.add(i);
+           ruta.addElement(i);
             done=done();
-            System.out.println(i.toString());
+            //System.out.println(i.toString());
             Stack<T> adyacencia=obtenerAdyacencia(inicio);
             
             
             if(done==true)
-                return pila;
+                return true;
             
             if(done==false && adyacencia==null){//no recorriste todo el grafo
                 int pos=done2();
-                pila.addElement(i);
-                return DFS(elementos[pos],done,pila);
+                ruta.addElement(i);
+                return DFS(elementos[pos],done,ruta);
                 
             
             }            
@@ -163,12 +167,12 @@ public class Grafo<T extends Comparable> {
                  v=new NodoGrafo<T>(vertice);
                   
                  if(marcado(v)==false){
-                      return DFS(vertice,done,pila);
+                      return DFS(vertice,done,ruta);
                  }
                   adyacencia=obtenerAdyacencia(inicio);
                  }
                  
-             return pila;
+            return resp;
             }
             
            
@@ -248,9 +252,8 @@ public class Grafo<T extends Comparable> {
     
     
     public static void main(String[] args) {
-        Stack<Integer> cola=new Stack<Integer>();
-        NodoGrafo<Integer>uno=new NodoGrafo(1);
-       Grafo<Integer> g=new Grafo(7);
+        
+        Grafo<Integer> g=new Grafo(7);
        for(int i=1;i<=g.Tope;i++){
            g.insert(i);
        }
@@ -266,7 +269,7 @@ public class Grafo<T extends Comparable> {
      System.out.println("");
       g.imprimeGrafo();
      
-     System.out.println(g.DFS(1,false,cola).toString());
+     g.dfs(1);
      
     }
     
