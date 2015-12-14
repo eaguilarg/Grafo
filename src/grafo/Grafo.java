@@ -175,6 +175,14 @@ public class Grafo<T extends Comparable> {
             return resp;
             }
             
+            public void TopologicalDFS(T i){
+                for(int i=0; i<Grafo.tope;i++){
+                    topological(i,pilaRuta);
+                }
+            }
+            private boolean topological(T i, Stack pilaRuta){
+                
+            }
            
             
             
