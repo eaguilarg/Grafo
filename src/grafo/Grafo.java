@@ -175,12 +175,32 @@ public class Grafo<T extends Comparable> {
             return resp;
             }
             
-            public void TopologicalDFS(T i){
-                for(int i=0; i<Grafo.tope;i++){
-                    topological(i,pilaRuta);
+            public void TopologicalDFS(NodoGrafo<T> j){
+               int NumVertices=Tope;Stack ruta = null;
+                for(int i=0; i<NumVertices;i++){
+                    if(marcado(j)==false){
+                        topological(j,ruta);
+                    }
+                    
                 }
             }
-            private boolean topological(T i, Stack pilaRuta){
+            private void topological(NodoGrafo<T> i, Stack ruta){
+                T vecino=null;
+                NodoGrafo<T> vecin;
+                Stack<T> lista;
+                marcar(i);
+                
+                 lista=obtenerAdyacencia(i);
+                 vecino=lista.pop();
+                 vecin=new NodoGrafo<T>(vecino);
+                 while(vecino!=null){
+                     if(marcado(vecin)==false){
+                         topological(vecin, ruta);
+                     }
+                     vecino=lista.pop();vecin=new NodoGrafo<T>(vecino);
+                 }
+                 
+                 ruta.add(i);
                 
             }
            
@@ -262,6 +282,7 @@ public class Grafo<T extends Comparable> {
     public static void main(String[] args) {
         
         Grafo<Integer> g=new Grafo(7);
+         NodoGrafo<Integer> uno=new NodoGrafo(1);
        for(int i=1;i<=g.Tope;i++){
            g.insert(i);
        }
@@ -277,7 +298,7 @@ public class Grafo<T extends Comparable> {
      System.out.println("");
       g.imprimeGrafo();
      
-     g.dfs(1);
+     g.TopologicalDFS(uno);
      
     }
     
